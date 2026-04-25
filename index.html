@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moobongri Soondae — Irvine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        charcoal: '#1A1A1A',
+        gochugaru: '#C2410C',
+        golden: '#F59E0B',
+        stone: '#FAFAF9',
+      },
+      fontFamily: {
+        serif: ['Playfair Display','Georgia','serif'],
+        sans: ['Inter','system-ui','sans-serif'],
+      }
+    }
+  }
+}
+</script>
+<style>
+*{cursor:none!important}
+#cur{position:fixed;width:8px;height:8px;background:#C2410C;border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+#cur2{position:fixed;width:34px;height:34px;border:1px solid rgba(194,65,12,.35);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s}
+body.cx #cur{width:18px;height:18px}
+body.cx #cur2{width:58px;height:58px;border-color:rgba(194,65,12,.55)}
+#prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,#C2410C,#F59E0B);z-index:1000;width:0;transition:width .08s linear}
+h1,h2,h3,.serif{font-family:'Playfair Display',Georgia,serif;letter-spacing:-.02em}
+body{font-family:'Inter',sans-serif;background:#FAFAF9;color:#1A1A1A;overflow-x:hidden}
+
+/* Fade-in */
+.fi{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease}
+.fi.on{opacity:1;transform:translateY(0)}
+
+/* Hero */
+#hero{position:relative;height:100vh;min-height:680px;overflow:hidden}
+#hbg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1635363638580-c2809d049eee?w=1920&q=85') center/cover no-repeat;filter:brightness(.5) contrast(1.1) saturate(1.2);transform-origin:center}
+@keyframes hzoom{0%{transform:scale(1)}100%{transform:scale(1.06)}}
+#hbg{animation:hzoom 9s ease-in-out infinite alternate}
+#hero::after{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E") repeat;background-size:128px;pointer-events:none;z-index:2;opacity:.25;mix-blend-mode:overlay}
+
+/* Nav */
+nav{transition:background .4s,box-shadow .4s}
+nav.s{background:rgba(250,250,249,.97)!important;box-shadow:0 1px 24px rgba(0,0,0,.08)}
+nav.s .nl{color:#1A1A1A!important}
+nav.s #nlogo{color:#1A1A1A!important}
+nav.s #ncta{background:#C2410C!important;color:#fff!important;border-color:#C2410C!important}
+
+/* Dish card */
+.dc{transition:transform .3s,box-shadow .3s}
+.dc:hover{transform:scale(1.03) translateY(-5px);box-shadow:0 28px 60px rgba(0,0,0,.15)}
+.dc .di{transition:transform .5s}
+.dc:hover .di{transform:scale(1.08)}
+
+/* Masonry */
+.mg{columns:3;column-gap:10px}
+.mi{break-inside:avoid;margin-bottom:10px;overflow:hidden;border-radius:10px;cursor:pointer}
+.mi img{width:100%;display:block;transition:transform .5s,filter .3s;filter:contrast(1.1) saturate(1.15) brightness(.97)}
+.mi:hover img{transform:scale(1.06);filter:contrast(1.15) saturate(1.25) brightness(1.02)}
+@media(max-width:768px){.mg{columns:2}}
+@media(max-width:480px){.mg{columns:1}}
+
+/* Review track */
+.rt{display:flex;transition:transform .6s cubic-bezier(.25,.46,.45,.94)}
+
+/* Tabs */
+.tb.act{color:#C2410C;border-bottom:2px solid #C2410C}
+
+/* Toast */
+#toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;transition:transform .3s,opacity .3s;z-index:9000}
+#toast.sh{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* Page transitions */
+.pg{display:none}
+.pg.act{display:block}
+
+/* Buttons */
+.bp{background:#C2410C;color:#fff;padding:14px 32px;border-radius:4px;font-weight:500;letter-spacing:.06em;font-size:13px;transition:background .2s,transform .15s;text-transform:uppercase;display:inline-block}
+.bp:hover{background:#9a3412;transform:translateY(-1px)}
+.bg{border:1.5px solid rgba(255,255,255,.75);color:#fff;padding:14px 32px;border-radius:4px;font-weight:500;letter-spacing:.06em;font-size:13px;transition:background .2s,transform .15s;text-transform:uppercase;display:inline-block}
+.bg:hover{background:rgba(255,255,255,.1);transform:translateY(-1px)}
+
+/* Form inputs */
+.ri{border:1px solid #e5e7eb;border-radius:8px;padding:12px 16px;font-size:14px;width:100%;background:#fff;outline:none;transition:border-color .2s,box-shadow .2s;font-family:'Inter',sans-serif}
+.ri:focus{border-color:#C2410C;box-shadow:0 0 0 3px rgba(194,65,12,.1)}
+
+/* Scroll bounce */
+@keyframes bd{0%,100%{transform:translateY(0) translateX(-50%)}50%{transform:translateY(9px) translateX(-50%)}}
+.sb{animation:bd 1.6s ease-in-out infinite}
+
+/* Section rule */
+.sr{width:44px;height:2px;background:#C2410C;margin:0 0 20px}
+
+/* Menu item hover */
+.mit{transition:background .2s;border-radius:12px}
+.mit:hover{background:rgba(194,65,12,.04)}
+
+/* Cart item enter */
+@keyframes sir{from{transform:translateX(16px);opacity:0}to{transform:translateX(0);opacity:1}}
+.ci{animation:sir .25s ease}
+
+/* Overlay */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.68);backdrop-filter:blur(6px);z-index:5000;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .4s}
+.ov.sh{opacity:1;pointer-events:all}
+
+/* Party btn */
+.pb{width:48px;height:48px;border-radius:12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#fff;font-size:14px;transition:all .2s}
+.pb:hover{border-color:#F59E0B;color:#F59E0B}
+.pb.sel{background:#F59E0B;border-color:#F59E0B;color:#1A1A1A;font-weight:700}
+
+/* Grain overlay */
+.gr::after{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");background-size:64px;pointer-events:none;mix-blend-mode:overlay;opacity:.5;border-radius:inherit}
+</style>
+</head>
+<body class="bg-stone">
+
+<!-- Cursor -->
+<div id="cur"></div>
+<div id="cur2"></div>
+<!-- Progress -->
+<div id="prog"></div>
+
+<!-- Toast -->
+<div id="toast" class="bg-charcoal text-white px-6 py-3 rounded-full text-sm font-medium shadow-2xl flex items-center gap-3">
+  <div class="w-2 h-2 rounded-full bg-golden animate-pulse"></div>
+  <span id="tmsg">Added to order</span>
+</div>
+
+<!-- NAV -->
+<nav id="nav" class="fixed top-0 left-0 right-0 z-50 px-6 md:px-10 py-5 flex items-center justify-between" style="background:transparent">
+  <button onclick="go('home')" id="nlogo" class="font-serif text-white text-xl font-bold tracking-tight flex items-center gap-3">
+    무봉리
+    <span class="text-golden text-xs font-sans font-normal tracking-[.25em] uppercase">Irvine</span>
+  </button>
+  <div class="hidden md:flex items-center gap-8">
+    <button onclick="go('home')"  class="nl text-white/85 text-sm font-medium tracking-wide hover:text-golden transition-colors">Home</button>
+    <button onclick="go('menu')"  class="nl text-white/85 text-sm font-medium tracking-wide hover:text-golden transition-colors">Menu</button>
+    <button onclick="go('order')" class="nl text-white/85 text-sm font-medium tracking-wide hover:text-golden transition-colors">Order Online</button>
+    <button onclick="go('res')"   class="nl text-white/85 text-sm font-medium tracking-wide hover:text-golden transition-colors">Reservations</button>
+  </div>
+  <button id="ncta" onclick="go('order')" class="hidden md:block text-sm font-medium px-5 py-2 border border-white/55 rounded text-white hover:bg-white/10 transition-all">Order Now</button>
+  <button class="md:hidden text-white" onclick="document.getElementById('mob').classList.toggle('hidden')">
+    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+</nav>
+
+<!-- Mobile menu -->
+<div id="mob" class="fixed inset-0 bg-charcoal z-40 hidden flex-col items-center justify-center gap-10">
+  <button onclick="document.getElementById('mob').classList.add('hidden')" class="absolute top-6 right-8 text-white">
+    <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+  </button>
+  <button onclick="go('home');document.getElementById('mob').classList.add('hidden')" class="text-white font-serif text-4xl">Home</button>
+  <button onclick="go('menu');document.getElementById('mob').classList.add('hidden')" class="text-white font-serif text-4xl">Menu</button>
+  <button onclick="go('order');document.getElementById('mob').classList.add('hidden')" class="text-white font-serif text-4xl">Order Online</button>
+  <button onclick="go('res');document.getElementById('mob').classList.add('hidden')" class="text-white font-serif text-4xl">Reservations</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ HOME -->
+<div id="pg-home" class="pg act">
+
+  <!-- HERO -->
+  <section id="hero">
+    <div id="hbg"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/25 via-black/15 to-black/65 z-[1]"></div>
+    <div class="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
+      <p class="text-golden text-xs font-medium tracking-[.3em] uppercase mb-5 opacity-90">Irvine, California</p>
+      <h1 class="text-white font-serif font-bold text-5xl md:text-7xl lg:text-[88px] leading-none mb-6" style="text-shadow:0 4px 40px rgba(0,0,0,.45)">
+        The Soul of<br><em style="font-style:italic">Korean Comfort.</em>
+      </h1>
+      <p class="text-white/75 text-lg md:text-xl max-w-xl leading-relaxed mb-10 font-light">
+        Authentic Soondae Guk and traditional stews, crafted with heritage and served in the heart of Irvine.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <button onclick="go('menu')"  class="bp">Experience the Menu</button>
+        <button onclick="go('res')"   class="bg">Reserve a Table</button>
+      </div>
+    </div>
+    <div class="sb absolute bottom-10 left-1/2">
+      <svg class="h-6 w-6 text-white/45" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"/></svg>
+    </div>
+  </section>
+
+  <!-- ABOUT TEASER -->
+  <section class="py-24 md:py-32 px-6 max-w-6xl mx-auto">
+    <div class="grid md:grid-cols-2 gap-16 items-center">
+      <div class="fi">
+        <p class="text-gochugaru text-xs tracking-[.25em] uppercase font-medium mb-4">Our Story</p>
+        <div class="sr"></div>
+        <h2 class="font-serif font-bold text-4xl md:text-5xl leading-tight mb-6">The Art of<br>the Broth.</h2>
+        <p class="text-gray-500 leading-relaxed mb-5 text-base">At Moobongri Irvine, we believe a great bowl of soup is a labor of love. Our signature Soondae Guk begins with a broth simmered for hours to achieve a milky, deep complexity that stays true to our roots.</p>
+        <p class="text-gray-500 leading-relaxed mb-8 text-base">Whether you're here for our world-class blood sausage or our sizzling hot pots, every dish is a tribute to the flavors of Korea, reimagined for the Irvine community. We don't just serve food; we serve memories of home.</p>
+        <button onclick="go('menu')" class="text-gochugaru text-sm font-medium tracking-wider uppercase border-b border-gochugaru/40 pb-1 hover:border-gochugaru transition-colors">Explore Our Menu →</button>
+      </div>
+      <div class="fi relative">
+        <div class="grid grid-cols-2 gap-3">
+          <img src="https://images.unsplash.com/photo-1555126634-323283e090fa?w=600&q=85" alt="Korean soup" class="w-full h-60 object-cover rounded-xl shadow-lg" style="filter:contrast(1.1) saturate(1.15)">
+          <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&q=85" alt="Restaurant" class="w-full h-60 object-cover rounded-xl shadow-lg mt-8" style="filter:contrast(1.05) saturate(1.05) brightness(.95)">
+        </div>
+        <div class="absolute -bottom-4 -left-4 bg-gochugaru text-white p-5 rounded-xl shadow-xl">
+          <p class="font-serif text-3xl font-bold">14<span class="text-sm font-sans font-light">hrs</span></p>
+          <p class="text-xs font-medium tracking-wider uppercase opacity-85 mt-1">Bone Broth</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHEF'S SELECTION -->
+  <section class="py-20 bg-charcoal">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-14 fi">
+        <p class="text-golden text-xs tracking-[.25em] uppercase font-medium mb-3">Featured</p>
+        <h2 class="font-serif font-bold text-white text-4xl md:text-5xl">Chef's Selection</h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+
+        <div class="dc bg-stone rounded-xl overflow-hidden shadow-lg fi relative gr">
+          <div class="overflow-hidden h-52"><img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=600&q=85" alt="Soondae Guk" class="di w-full h-52 object-cover" style="filter:contrast(1.15) saturate(1.2) brightness(.93)"></div>
+          <div class="p-6">
+            <div class="flex items-start justify-between mb-2">
+              <div><p class="font-serif font-bold text-xl">Soondae Guk</p><p class="text-xs text-gray-400 tracking-wide mt-0.5">순대국</p></div>
+              <span class="text-gochugaru font-semibold text-lg">$22.98</span>
+            </div>
+            <p class="text-gray-500 text-sm leading-relaxed mt-3">Traditional blood sausage in a rich, 14-hour bone broth. A generational recipe perfected over decades.</p>
+            <div class="mt-4 flex items-center gap-2 flex-wrap">
+              <span class="text-xs bg-golden/10 text-golden px-3 py-1 rounded-full font-medium">House Specialty</span>
+              <span class="text-xs bg-red-50 text-gochugaru px-3 py-1 rounded-full font-medium">🌶 Medium</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dc bg-stone rounded-xl overflow-hidden shadow-lg fi relative gr" style="transition-delay:.1s">
+          <div class="overflow-hidden h-52"><img src="https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=600&q=85" alt="Pork Belly Soup" class="di w-full h-52 object-cover" style="filter:contrast(1.2) saturate(1.3) brightness(.9)"></div>
+          <div class="p-6">
+            <div class="flex items-start justify-between mb-2">
+              <div><p class="font-serif font-bold text-xl">Spicy Pork Belly Soup</p><p class="text-xs text-gray-400 tracking-wide mt-0.5">돼지국밥</p></div>
+              <span class="text-gochugaru font-semibold text-lg">$24.13</span>
+            </div>
+            <p class="text-gray-500 text-sm leading-relaxed mt-3">Tender pork belly slices in a vibrant, spicy aromatics-infused soup. Served with house-made kimchi.</p>
+            <div class="mt-4 flex items-center gap-2 flex-wrap">
+              <span class="text-xs bg-golden/10 text-golden px-3 py-1 rounded-full font-medium">Chef's Pick</span>
+              <span class="text-xs bg-red-50 text-gochugaru px-3 py-1 rounded-full font-medium">🌶🌶 Spicy</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dc bg-stone rounded-xl overflow-hidden shadow-lg fi relative gr" style="transition-delay:.2s">
+          <div class="overflow-hidden h-52"><img src="https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=600&q=85" alt="Combination Soondae" class="di w-full h-52 object-cover" style="filter:contrast(1.1) saturate(1.15)"></div>
+          <div class="p-6">
+            <div class="flex items-start justify-between mb-2">
+              <div><p class="font-serif font-bold text-xl">Combination Soondae</p><p class="text-xs text-gray-400 tracking-wide mt-0.5">모듬순대</p></div>
+              <span class="text-gochugaru font-semibold text-lg">$40.23</span>
+            </div>
+            <p class="text-gray-500 text-sm leading-relaxed mt-3">An artisanal assortment of house-made soondae, steamed liver, and tender pork. Serves 2–3.</p>
+            <div class="mt-4 flex items-center gap-2 flex-wrap">
+              <span class="text-xs bg-golden/10 text-golden px-3 py-1 rounded-full font-medium">For Sharing</span>
+              <span class="text-xs bg-green-50 text-green-700 px-3 py-1 rounded-full font-medium">Crowd Favorite</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="text-center mt-12 fi">
+        <button onclick="go('menu')" class="bp">View Full Menu</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESERVATION WIDGET -->
+  <section class="py-24 px-6" style="background:linear-gradient(140deg,#FAFAF9 0%,#fff8ee 100%)">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-12 fi">
+        <p class="text-gochugaru text-xs tracking-[.25em] uppercase font-medium mb-3">Dining Experience</p>
+        <h2 class="font-serif font-bold text-4xl md:text-5xl">Reserve Your Table</h2>
+        <p class="text-gray-400 mt-3 text-base">Join us for an evening of authentic Korean flavors</p>
+      </div>
+      <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12 fi">
+        <div class="grid md:grid-cols-4 gap-5">
+          <div>
+            <label class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Date</label>
+            <input type="date" class="ri" value="2026-05-01">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Time</label>
+            <select class="ri">
+              <option>6:00 PM</option><option>6:30 PM</option><option selected>7:00 PM</option>
+              <option>7:30 PM</option><option>8:00 PM</option><option>8:30 PM</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Guests</label>
+            <select class="ri">
+              <option>1 Guest</option><option selected>2 Guests</option><option>3 Guests</option>
+              <option>4 Guests</option><option>5 Guests</option><option>6 Guests</option>
+              <option>7 Guests</option><option>8 Guests</option><option>9 Guests</option><option>10 Guests</option>
+            </select>
+          </div>
+          <div class="flex items-end">
+            <button onclick="go('res')" class="bp w-full text-center">Find a Time</button>
+          </div>
+        </div>
+        <div class="mt-6 pt-6 border-t border-gray-100 flex flex-wrap gap-6 text-sm text-gray-400">
+          <div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-green-400"></div>Tables available tonight</div>
+          <div class="flex items-center gap-2">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Mon–Sun, 11am–10pm
+          </div>
+          <div class="flex items-center gap-2">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+            2300 Alton Pkwy, Irvine CA
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="py-20 px-6 max-w-6xl mx-auto">
+    <div class="text-center mb-12 fi">
+      <p class="text-gochugaru text-xs tracking-[.25em] uppercase font-medium mb-3">From Our Kitchen</p>
+      <h2 class="font-serif font-bold text-4xl md:text-5xl">In the Moment.</h2>
+    </div>
+    <div class="mg fi">
+      <div class="mi"><img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=500&q=85" alt=""></div>
+      <div class="mi"><img src="https://images.unsplash.com/photo-1555126634-323283e090fa?w=500&q=85" alt=""></div>
+      <div class="mi"><img src="https://images.unsplash.com/photo-1590301157890-4810ed352733?w=500&q=85" alt=""></div>
+      <div class="mi"><img src="https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=500&q=85" alt=""></div>
+      <div class="mi"><img src="https://images.unsplash.com/photo-1580822184713-fc5400e7fe10?w=500&q=85" alt=""></div>
+      <div class="mi"><img src="https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=500&q=85" alt=""></div>
+      <div class="mi"><img src="https://images.unsplash.com/photo-1635363638580-c2809d049eee?w=500&q=85" alt=""></div>
+      <div class="mi"><img src="https://images.unsplash.com/photo-1498654896293-37aacf113fd9?w=500&q=85" alt=""></div>
+    </div>
+    <div class="text-center mt-10 fi">
+      <span class="text-gochugaru text-sm font-medium tracking-wider uppercase border-b border-gochugaru/40 pb-1">Follow @moobongri.irvine →</span>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="py-20 bg-charcoal overflow-hidden">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-12 fi">
+        <p class="text-golden text-xs tracking-[.25em] uppercase font-medium mb-3">Reviews</p>
+        <h2 class="font-serif font-bold text-white text-4xl md:text-5xl">What the Neighborhood<br>is Saying.</h2>
+      </div>
+      <div class="overflow-hidden">
+        <div id="rt" class="rt gap-5" style="width:max-content">
+          <div class="bg-white/6 rounded-xl p-8 w-80 flex-shrink-0">
+            <div class="flex gap-1 mb-4 text-golden text-lg">★★★★★</div>
+            <p class="text-white/80 text-sm leading-relaxed mb-6">"The Soondae Guk here is unreal. I've been to Korean restaurants in LA and this broth is genuinely one of the best I've had. The milky depth of flavor is extraordinary."</p>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-golden to-gochugaru flex items-center justify-center text-white font-bold text-sm">J</div>
+              <div><p class="text-white font-medium text-sm">James K.</p><p class="text-white/40 text-xs">Google Review · ✓ Verified</p></div>
+            </div>
+          </div>
+          <div class="bg-white/6 rounded-xl p-8 w-80 flex-shrink-0">
+            <div class="flex gap-1 mb-4 text-golden text-lg">★★★★★</div>
+            <p class="text-white/80 text-sm leading-relaxed mb-6">"Finally, authentic Busan-style soondae in Irvine! My parents who are from Korea said it tasted just like home. The service is warm and the space is absolutely gorgeous."</p>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold text-sm">S</div>
+              <div><p class="text-white font-medium text-sm">Sarah H.</p><p class="text-white/40 text-xs">Yelp Review · ✓ Verified</p></div>
+            </div>
+          </div>
+          <div class="bg-white/6 rounded-xl p-8 w-80 flex-shrink-0">
+            <div class="flex gap-1 mb-4 text-golden text-lg">★★★★★</div>
+            <p class="text-white/80 text-sm leading-relaxed mb-6">"The combination soondae plate is an absolute must-order. The pork belly soup had me sweating in the best way. This is now my go-to spot in Irvine, hands down."</p>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-teal-500 flex items-center justify-center text-white font-bold text-sm">M</div>
+              <div><p class="text-white font-medium text-sm">Mike T.</p><p class="text-white/40 text-xs">Google Review · ✓ Verified</p></div>
+            </div>
+          </div>
+          <div class="bg-white/6 rounded-xl p-8 w-80 flex-shrink-0">
+            <div class="flex gap-1 mb-4 text-golden text-lg">★★★★★</div>
+            <p class="text-white/80 text-sm leading-relaxed mb-6">"I brought my non-Korean friends here for the first time and they were blown away. The food is approachable yet deeply authentic. Beautiful restaurant, incredible value."</p>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center text-white font-bold text-sm">L</div>
+              <div><p class="text-white font-medium text-sm">Lauren P.</p><p class="text-white/40 text-xs">Yelp Review · ✓ Verified</p></div>
+            </div>
+          </div>
+          <div class="bg-white/6 rounded-xl p-8 w-80 flex-shrink-0">
+            <div class="flex gap-1 mb-4 text-golden text-lg">★★★★★</div>
+            <p class="text-white/80 text-sm leading-relaxed mb-6">"The best soondae I've had outside of Korea. The owner takes so much pride in every dish — you can taste it. Highly recommend the 14-hour bone broth soup."</p>
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center text-white font-bold text-sm">D</div>
+              <div><p class="text-white font-medium text-sm">David C.</p><p class="text-white/40 text-xs">Google Review · ✓ Verified</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center justify-center gap-5 mt-10">
+          <button onclick="slide(-1)" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          </button>
+          <div id="rdots" class="flex gap-2">
+            <div class="w-2 h-2 rounded-full bg-golden"></div>
+            <div class="w-2 h-2 rounded-full bg-white/20"></div>
+            <div class="w-2 h-2 rounded-full bg-white/20"></div>
+          </div>
+          <button onclick="slide(1)" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-charcoal border-t border-white/5 py-16 px-6">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid md:grid-cols-4 gap-12 mb-12">
+        <div class="md:col-span-2">
+          <p class="font-serif text-white text-2xl font-bold mb-4">무봉리 <span class="text-golden text-base font-sans font-normal">Irvine</span></p>
+          <p class="text-white/45 text-sm leading-relaxed max-w-sm">Authentic Soondae Guk and traditional Korean stews served with heritage, heart, and warmth in the Irvine community.</p>
+          <div class="flex gap-3 mt-6">
+            <a href="#" class="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/55 hover:border-golden hover:text-golden transition-colors text-xs">IG</a>
+            <a href="#" class="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/55 hover:border-golden hover:text-golden transition-colors text-xs">FB</a>
+            <a href="#" class="w-9 h-9 rounded-full border border-white/20 flex items-center justify-center text-white/55 hover:border-golden hover:text-golden transition-colors text-xs">YP</a>
+          </div>
+        </div>
+        <div>
+          <p class="text-white/30 text-xs uppercase tracking-widest mb-5">Visit</p>
+          <p class="text-white/65 text-sm mb-1">2300 Alton Pkwy, Suite 210</p>
+          <p class="text-white/65 text-sm mb-1">Irvine, CA 92606</p>
+          <p class="text-white/65 text-sm mt-4">Mon–Sun</p>
+          <p class="text-white/65 text-sm">11:00 AM – 10:00 PM</p>
+        </div>
+        <div>
+          <p class="text-white/30 text-xs uppercase tracking-widest mb-5">Contact</p>
+          <p class="text-white/65 text-sm mb-2">(949) 555-0192</p>
+          <p class="text-white/65 text-sm mb-6">hello@moobongri.com</p>
+          <button onclick="go('res')" class="bp text-xs px-5 py-2.5">Make a Reservation</button>
+        </div>
+      </div>
+      <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <p class="text-white/25 text-xs">© 2026 Moobongri Soondae Irvine. All rights reserved.</p>
+        <p class="text-white/18 text-xs">Visual Demo — Not a live website</p>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ MENU -->
+<div id="pg-menu" class="pg">
+  <div class="relative h-64 md:h-72 overflow-hidden">
+    <img src="https://images.unsplash.com/photo-1547592180-85f173990554?w=1920&q=85" class="w-full h-full object-cover" style="filter:brightness(.38) contrast(1.2) saturate(1.1)" alt="">
+    <div class="absolute inset-0 flex items-center justify-center">
+      <div class="text-center">
+        <p class="text-golden text-xs tracking-[.25em] uppercase font-medium mb-3">Moobongri Irvine</p>
+        <h1 class="font-serif font-bold text-white text-5xl md:text-6xl">The Menu</h1>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-5xl mx-auto px-6 py-14">
+    <!-- Tabs -->
+    <div class="flex border-b border-gray-200 mb-12 overflow-x-auto">
+      <button onclick="tab('soups')"  id="tb-soups"  class="tb act px-6 py-3 text-sm font-medium tracking-wide whitespace-nowrap text-gochugaru border-b-2 border-gochugaru">Soups & Stews</button>
+      <button onclick="tab('hotpots')" id="tb-hotpots" class="tb px-6 py-3 text-sm font-medium tracking-wide whitespace-nowrap text-gray-400 border-b-2 border-transparent hover:text-gochugaru transition-colors">Hot Pots</button>
+      <button onclick="tab('plates')" id="tb-plates"  class="tb px-6 py-3 text-sm font-medium tracking-wide whitespace-nowrap text-gray-400 border-b-2 border-transparent hover:text-gochugaru transition-colors">Plates & Sides</button>
+      <button onclick="tab('drinks')" id="tb-drinks"  class="tb px-6 py-3 text-sm font-medium tracking-wide whitespace-nowrap text-gray-400 border-b-2 border-transparent hover:text-gochugaru transition-colors">Drinks</button>
+    </div>
+
+    <!-- SOUPS -->
+    <div id="ms-soups" class="space-y-1">
+      <div class="mit flex items-start justify-between p-5">
+        <div class="flex gap-5 flex-1">
+          <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=200&q=80" class="w-20 h-20 rounded-lg object-cover flex-shrink-0" style="filter:contrast(1.1) saturate(1.2)" alt="">
+          <div>
+            <div class="flex items-center flex-wrap gap-2 mb-1">
+              <p class="font-serif font-bold text-lg">Soondae Guk</p><span class="text-xs text-gray-400">순대국</span>
+              <span class="text-xs bg-golden/10 text-golden px-2 py-0.5 rounded-full">Signature</span>
+            </div>
+            <p class="text-gray-500 text-sm leading-relaxed max-w-md">Traditional blood sausage in a rich, milky 14-hour bone broth. Served with rice and house kimchi.</p>
+            <p class="text-xs text-gray-400 mt-2">🌶 Medium · Pork-based</p>
+          </div>
+        </div>
+        <div class="text-right ml-5 flex-shrink-0">
+          <p class="font-semibold text-lg">$22.98</p>
+          <button onclick="addCart('Soondae Guk',22.98)" class="mt-2 text-xs text-gochugaru border border-gochugaru/30 px-3 py-1.5 rounded hover:bg-gochugaru hover:text-white transition-all">+ Add</button>
+        </div>
+      </div>
+      <div class="mit flex items-start justify-between p-5">
+        <div class="flex gap-5 flex-1">
+          <img src="https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=200&q=80" class="w-20 h-20 rounded-lg object-cover flex-shrink-0" style="filter:contrast(1.15) saturate(1.2)" alt="">
+          <div>
+            <div class="flex items-center flex-wrap gap-2 mb-1">
+              <p class="font-serif font-bold text-lg">Spicy Pork Belly Soup</p><span class="text-xs text-gray-400">돼지국밥</span>
+            </div>
+            <p class="text-gray-500 text-sm leading-relaxed max-w-md">Tender pork belly slices in a vibrant, spicy aromatics-infused broth. Layered with gochugaru oil and scallions.</p>
+            <p class="text-xs text-gray-400 mt-2">🌶🌶 Spicy · Pork-based</p>
+          </div>
+        </div>
+        <div class="text-right ml-5 flex-shrink-0">
+          <p class="font-semibold text-lg">$24.13</p>
+          <button onclick="addCart('Spicy Pork Belly Soup',24.13)" class="mt-2 text-xs text-gochugaru border border-gochugaru/30 px-3 py-1.5 rounded hover:bg-gochugaru hover:text-white transition-all">+ Add</button>
+        </div>
+      </div>
+      <div class="mit flex items-start justify-between p-5">
+        <div class="flex gap-5 flex-1">
+          <img src="https://images.unsplash.com/photo-1635363638580-c2809d049eee?w=200&q=80" class="w-20 h-20 rounded-lg object-cover flex-shrink-0" style="filter:contrast(1.1) saturate(1.1)" alt="">
+          <div>
+            <div class="flex items-center flex-wrap gap-2 mb-1">
+              <p class="font-serif font-bold text-lg">Seolleongtang</p><span class="text-xs text-gray-400">설렁탕</span>
+            </div>
+            <p class="text-gray-500 text-sm leading-relaxed max-w-md">Milky white ox bone broth, slow-simmered overnight. Delicately seasoned with house sea salt and garnished with radish.</p>
+            <p class="text-xs text-gray-400 mt-2">Mild · Beef-based</p>
+          </div>
+        </div>
+        <div class="text-right ml-5 flex-shrink-0">
+          <p class="font-semibold text-lg">$21.50</p>
+          <button onclick="addCart('Seolleongtang',21.50)" class="mt-2 text-xs text-gochugaru border border-gochugaru/30 px-3 py-1.5 rounded hover:bg-gochugaru hover:text-white transition-all">+ Add</button>
+        </div>
+      </div>
+      <div class="mit flex items-start justify-between p-5">
+        <div class="flex gap-5 flex-1">
+          <img src="https://images.unsplash.com/photo-1498654896293-37aacf113fd9?w=200&q=80" class="w-20 h-20 rounded-lg object-cover flex-shrink-0" style="filter:contrast(1.15) saturate(1.3) brightness(.95)" alt="">
+          <div>
+            <div class="flex items-center flex-wrap gap-2 mb-1">
+              <p class="font-serif font-bold text-lg">Kimchi Jjigae</p><span class="text-xs text-gray-400">김치찌개</span>
+              <span class="text-xs bg-red-50 text-gochugaru px-2 py-0.5 rounded-full">Customer Fav</span>
+            </div>
+            <p class="text-gray-500 text-sm leading-relaxed max-w-md">Deeply fermented house kimchi simmered with pork and tofu in a bold, tangy broth. Served bubbling at the table.</p>
+            <p class="text-xs text-gray-400 mt-2">🌶🌶🌶 Very Spicy · Pork-based</p>
+          </div>
+        </div>
+        <div class="text-right ml-5 flex-shrink-0">
+          <p class="font-semibold text-lg">$19.98</p>
+          <button onclick="addCart('Kimchi Jjigae',19.98)" class="mt-2 text-xs text-gochugaru border border-gochugaru/30 px-3 py-1.5 rounded hover:bg-gochugaru hover:text-white transition-all">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOT POTS -->
+    <div id="ms-hotpots" class="space-y-1 hidden">
+      <div class="mit flex items-start justify-between p-5">
+        <div class="flex gap-5 flex-1">
+          <img src="https://images.unsplash.com/photo-1590301157890-4810ed352733?w=200&q=80" class="w-20 h-20 rounded-lg object-cover flex-shrink-0" style="filter:contrast(1.15) saturate(1.2)" alt="">
+          <div>
+            <div class="flex items-center flex-wrap gap-2 mb-1">
+              <p class="font-serif font-bold text-lg">Budae Jjigae</p><span class="text-xs text-gray-400">부대찌개</span>
+              <span class="text-xs bg-golden/10 text-golden px-2 py-0.5 rounded-full">For 2</span>
+            </div>
+            <p class="text-gray-500 text-sm leading-relaxed max-w-md">A soulful stew with SPAM, hot dogs, baked beans, rice cakes, and ramen noodles in a spicy broth. A Korean-American classic.</p>
+            <p class="text-xs text-gray-400 mt-2">🌶 Medium · Serves 2</p>
+          </div>
+        </div>
+        <div class="text-right ml-5 flex-shrink-0">
+          <p class="font-semibold text-lg">$38.00</p>
+          <button onclick="addCart('Budae Jjigae',38.00)" class="mt-2 text-xs text-gochugaru border border-gochugaru/30 px-3 py-1.5 rounded hover:bg-gochugaru hover:text-white transition-all">+ Add</button>
+        </div>
+      </div>
+      <div class="mit flex items-start justify-between p-5">
+        <div class="flex gap-5 flex-1">
+          <img src="https://images.unsplash.com/photo-1580822184713-fc5400e7fe10?w=200&q=80" class="w-20 h-20 rounded-lg object-cover flex-shrink-0" style="filter:contrast(1.1) saturate(1.2)" alt="">
+          <div>
+            <div class="flex items-center flex-wrap gap-2 mb-1">
+              <p class="font-serif font-bold text-lg">Doenjang Jjigae</p><span class="text-xs text-gray-400">된장찌개</span>
+            </div>
+            <p class="text-gray-500 text-sm leading-relaxed max-w-md">Fermented soybean paste stew with zucchini, mushrooms, tofu, and clams. Earthy, umami-rich, profoundly comforting.</p>
+            <p class="text-xs text-gray-400 mt-2">Mild · Vegetarian option available</p>
+          </div>
+        </div>
+        <div class="text-right ml-5 flex-shrink-0">
+          <p class="font-semibold text-lg">$22.00</p>
+          <button onclick="addCart('Doenjang Jjigae',22.00)" class="mt-2 text-xs text-gochugaru border border-gochugaru/30 px-3 py-1.5 rounded hover:bg-gochugaru hover:text-white transition-all">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLATES -->
+    <div id="ms-plates" class="space-y-1 hidden">
+      <div class="mit flex items-start justify-between p-5">
+        <div class="flex gap-5 flex-1">
+          <img src="https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=200&q=80" class="w-20 h-20 rounded-lg object-cover flex-shrink-0" style="filter:contrast(1.1) saturate(1.15)" alt="">
+          <div>
+            <div class="flex items-center flex-wrap gap-2 mb-1">
+              <p class="font-serif font-bold text-lg">Combination Soondae Plate</p><span class="text-xs text-gray-400">모듬순대</span>
+              <span class="text-xs bg-golden/10 text-golden px-2 py-0.5 rounded-full">Signature</span>
+            </div>
+            <p class="text-gray-500 text-sm leading-relaxed max-w-md">An artisanal assortment of house-made soondae, steamed liver, and tender pork. Served with house dipping salt and perilla.</p>
+            <p class="text-xs text-gray-400 mt-2">Serves 2–3</p>
+          </div>
+        </div>
+        <div class="text-right ml-5 flex-shrink-0">
+          <p class="font-semibold text-lg">$40.23</p>
+          <button onclick="addCart('Combination Soondae Plate',40.23)" class="mt-2 text-xs text-gochugaru border border-gochugaru/30 px-3 py-1.5 rounded hover:bg-gochugaru hover:text-white transition-all">+ Add</button>
+        </div>
+      </div>
+      <div class="mit flex items-start justify-between p-5">
+        <div class="flex gap-5 flex-1">
+          <div class="w-20 h-20 rounded-lg bg-stone flex items-center justify-center flex-shrink-0 text-3xl border border-gray-100">🍚</div>
+          <div>
+            <div class="flex items-center flex-wrap gap-2 mb-1">
+              <p class="font-serif font-bold text-lg">Steamed Rice</p><span class="text-xs text-gray-400">공기밥</span>
+            </div>
+            <p class="text-gray-500 text-sm">Perfectly steamed short-grain Korean rice.</p>
+          </div>
+        </div>
+        <div class="text-right ml-5 flex-shrink-0">
+          <p class="font-semibold text-lg">$3.00</p>
+          <button onclick="addCart('Steamed Rice',3.00)" class="mt-2 text-xs text-gochugaru border border-gochugaru/30 px-3 py-1.5 rounded hover:bg-gochugaru hover:text-white transition-all">+ Add</button>
+        </div>
+      </div>
+      <div class="mit flex items-start justify-between p-5">
+        <div class="flex gap-5 flex-1">
+          <div class="w-20 h-20 rounded-lg bg-stone flex items-center justify-center flex-shrink-0 text-3xl border border-gray-100">🥢</div>
+          <div>
+            <div class="flex items-center flex-wrap gap-2 mb-1">
+              <p class="font-serif font-bold text-lg">House Kimchi</p><span class="text-xs text-gray-400">김치</span>
+              <span class="text-xs bg-green-50 text-green-700 px-2 py-0.5 rounded-full">Housemade</span>
+            </div>
+            <p class="text-gray-500 text-sm">Fermented 30 days in-house. Complex, tangy, and alive.</p>
+          </div>
+        </div>
+        <div class="text-right ml-5 flex-shrink-0">
+          <p class="font-semibold text-lg">$5.00</p>
+          <button onclick="addCart('House Kimchi',5.00)" class="mt-2 text-xs text-gochugaru border border-gochugaru/30 px-3 py-1.5 rounded hover:bg-gochugaru hover:text-white transition-all">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DRINKS -->
+    <div id="ms-drinks" class="space-y-1 hidden">
+      <div class="mit flex items-start justify-between p-5">
+        <div class="flex gap-5 flex-1">
+          <div class="w-20 h-20 rounded-lg bg-stone flex items-center justify-center flex-shrink-0 text-3xl border border-gray-100">🍵</div>
+          <div>
+            <div class="flex items-center flex-wrap gap-2 mb-1">
+              <p class="font-serif font-bold text-lg">Barley Tea</p><span class="text-xs text-gray-400">보리차</span>
+            </div>
+            <p class="text-gray-500 text-sm">Complimentary roasted barley tea, served warm or cold.</p>
+          </div>
+        </div>
+        <div class="text-right ml-5 flex-shrink-0">
+          <p class="font-semibold text-lg text-gray-400">Compl.</p>
+        </div>
+      </div>
+      <div class="mit flex items-start justify-between p-5">
+        <div class="flex gap-5 flex-1">
+          <div class="w-20 h-20 rounded-lg bg-stone flex items-center justify-center flex-shrink-0 text-3xl border border-gray-100">🍺</div>
+          <div>
+            <div class="flex items-center flex-wrap gap-2 mb-1">
+              <p class="font-serif font-bold text-lg">Hite Extra Cold</p><span class="text-xs text-gray-400">하이트</span>
+            </div>
+            <p class="text-gray-500 text-sm">Crisp Korean lager, the perfect companion to soondae.</p>
+          </div>
+        </div>
+        <div class="text-right ml-5 flex-shrink-0">
+          <p class="font-semibold text-lg">$6.00</p>
+          <button onclick="addCart('Hite Extra Cold',6.00)" class="mt-2 text-xs text-gochugaru border border-gochugaru/30 px-3 py-1.5 rounded hover:bg-gochugaru hover:text-white transition-all">+ Add</button>
+        </div>
+      </div>
+      <div class="mit flex items-start justify-between p-5">
+        <div class="flex gap-5 flex-1">
+          <div class="w-20 h-20 rounded-lg bg-stone flex items-center justify-center flex-shrink-0 text-3xl border border-gray-100">🥃</div>
+          <div>
+            <div class="flex items-center flex-wrap gap-2 mb-1">
+              <p class="font-serif font-bold text-lg">Jinro Soju</p><span class="text-xs text-gray-400">진로 소주</span>
+            </div>
+            <p class="text-gray-500 text-sm">Smooth Korean soju, served chilled. 360ml bottle.</p>
+          </div>
+        </div>
+        <div class="text-right ml-5 flex-shrink-0">
+          <p class="font-semibold text-lg">$12.00</p>
+          <button onclick="addCart('Jinro Soju',12.00)" class="mt-2 text-xs text-gochugaru border border-gochugaru/30 px-3 py-1.5 rounded hover:bg-gochugaru hover:text-white transition-all">+ Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA strip -->
+    <div class="mt-16 bg-charcoal rounded-2xl p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div>
+        <p class="font-serif text-white text-2xl font-bold">Ready to order?</p>
+        <p class="text-white/45 text-sm mt-1">Place your order online for pickup or delivery.</p>
+      </div>
+      <button onclick="go('order')" class="bp whitespace-nowrap">Order Online →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ ORDER -->
+<div id="pg-order" class="pg">
+  <div class="bg-charcoal py-16 px-6 text-center">
+    <p class="text-golden text-xs tracking-[.25em] uppercase font-medium mb-3">Pickup & Delivery</p>
+    <h1 class="font-serif font-bold text-white text-5xl">Order Online</h1>
+    <p class="text-white/45 text-sm mt-3">Ready in 25–35 minutes · Open Now</p>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-6 py-12 flex flex-col lg:flex-row gap-10">
+    <!-- Item grid -->
+    <div class="flex-1">
+      <h2 class="font-serif font-bold text-2xl mb-6">Our Favorites</h2>
+      <div class="grid md:grid-cols-2 gap-5">
+
+        <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+          <div class="overflow-hidden h-44"><img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=500&q=85" class="w-full h-44 object-cover hover:scale-105 transition-transform duration-500" style="filter:contrast(1.1) saturate(1.2)" alt=""></div>
+          <div class="p-5">
+            <div class="flex justify-between items-start mb-1">
+              <div><p class="font-serif font-bold text-lg">Soondae Guk</p><p class="text-xs text-gray-400">순대국 · Medium spicy</p></div>
+              <span class="text-gochugaru font-semibold">$22.98</span>
+            </div>
+            <p class="text-gray-400 text-xs leading-relaxed mb-4">Traditional blood sausage in a rich, 14-hour bone broth.</p>
+            <button onclick="addCart('Soondae Guk',22.98)" class="w-full bg-gochugaru text-white text-xs font-medium py-2.5 rounded-lg hover:bg-red-800 transition-colors uppercase tracking-wider">Add to Order</button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+          <div class="overflow-hidden h-44"><img src="https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=500&q=85" class="w-full h-44 object-cover hover:scale-105 transition-transform duration-500" style="filter:contrast(1.15) saturate(1.3)" alt=""></div>
+          <div class="p-5">
+            <div class="flex justify-between items-start mb-1">
+              <div><p class="font-serif font-bold text-lg">Spicy Pork Belly</p><p class="text-xs text-gray-400">돼지국밥 · Spicy</p></div>
+              <span class="text-gochugaru font-semibold">$24.13</span>
+            </div>
+            <p class="text-gray-400 text-xs leading-relaxed mb-4">Tender pork belly slices in a vibrant, spicy aromatics broth.</p>
+            <button onclick="addCart('Spicy Pork Belly Soup',24.13)" class="w-full bg-gochugaru text-white text-xs font-medium py-2.5 rounded-lg hover:bg-red-800 transition-colors uppercase tracking-wider">Add to Order</button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+          <div class="overflow-hidden h-44"><img src="https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=500&q=85" class="w-full h-44 object-cover hover:scale-105 transition-transform duration-500" style="filter:contrast(1.1) saturate(1.15)" alt=""></div>
+          <div class="p-5">
+            <div class="flex justify-between items-start mb-1">
+              <div><p class="font-serif font-bold text-lg">Combination Soondae</p><p class="text-xs text-gray-400">모듬순대 · Serves 2–3</p></div>
+              <span class="text-gochugaru font-semibold">$40.23</span>
+            </div>
+            <p class="text-gray-400 text-xs leading-relaxed mb-4">House-made soondae, steamed liver, and tender pork.</p>
+            <button onclick="addCart('Combination Soondae Plate',40.23)" class="w-full bg-gochugaru text-white text-xs font-medium py-2.5 rounded-lg hover:bg-red-800 transition-colors uppercase tracking-wider">Add to Order</button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+          <div class="overflow-hidden h-44"><img src="https://images.unsplash.com/photo-1498654896293-37aacf113fd9?w=500&q=85" class="w-full h-44 object-cover hover:scale-105 transition-transform duration-500" style="filter:contrast(1.15) saturate(1.3)" alt=""></div>
+          <div class="p-5">
+            <div class="flex justify-between items-start mb-1">
+              <div><p class="font-serif font-bold text-lg">Kimchi Jjigae</p><p class="text-xs text-gray-400">김치찌개 · Very spicy</p></div>
+              <span class="text-gochugaru font-semibold">$19.98</span>
+            </div>
+            <p class="text-gray-400 text-xs leading-relaxed mb-4">House kimchi simmered with pork and tofu in a tangy broth.</p>
+            <button onclick="addCart('Kimchi Jjigae',19.98)" class="w-full bg-gochugaru text-white text-xs font-medium py-2.5 rounded-lg hover:bg-red-800 transition-colors uppercase tracking-wider">Add to Order</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Cart panel -->
+    <div class="lg:w-80 xl:w-96">
+      <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 sticky top-24">
+        <div class="flex items-center justify-between mb-5">
+          <h3 class="font-serif font-bold text-xl">Your Order</h3>
+          <span id="cbadge" class="bg-gochugaru text-white text-xs w-6 h-6 rounded-full flex items-center justify-center font-medium">0</span>
+        </div>
+        <div id="citems" class="space-y-3 mb-4 min-h-[80px]">
+          <div id="cempty" class="text-center py-5 text-gray-400 text-sm"><p class="text-3xl mb-2">🥢</p>Your cart is empty</div>
+        </div>
+        <div class="border-t border-gray-100 pt-5 space-y-4">
+          <div>
+            <label class="text-xs font-medium text-gray-400 uppercase tracking-wider block mb-2">Delivery Address</label>
+            <input type="text" placeholder="Enter your address" class="ri text-sm">
+          </div>
+          <div>
+            <label class="text-xs font-medium text-gray-400 uppercase tracking-wider block mb-2">Card Number</label>
+            <input type="text" placeholder="•••• •••• •••• ••••" class="ri text-sm">
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <input type="text" placeholder="MM / YY" class="ri text-sm">
+            <input type="text" placeholder="CVV" class="ri text-sm">
+          </div>
+          <div class="border-t border-gray-100 pt-4 space-y-2 text-sm">
+            <div class="flex justify-between"><span class="text-gray-400">Subtotal</span><span id="csub" class="font-medium">$0.00</span></div>
+            <div class="flex justify-between"><span class="text-gray-400">Delivery</span><span class="font-medium">$3.99</span></div>
+            <div class="flex justify-between"><span class="text-gray-400">Tax (8.75%)</span><span id="ctax" class="font-medium">$0.00</span></div>
+            <div class="flex justify-between font-bold pt-1 text-base"><span>Total</span><span id="ctotal" class="text-gochugaru">$3.99</span></div>
+          </div>
+          <button onclick="placeOrder()" class="bp w-full text-center py-4">Place Demo Order</button>
+          <p class="text-center text-xs text-gray-300">No actual order will be placed</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order success overlay -->
+  <div id="oov" class="ov">
+    <div class="bg-white rounded-2xl shadow-2xl p-10 max-w-md w-full text-center">
+      <div class="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
+        <svg class="h-10 w-10 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+      </div>
+      <h2 class="font-serif font-bold text-3xl mb-2">Order Received.</h2>
+      <p class="text-gray-400 text-sm mb-3">Your food is being prepared.</p>
+      <div class="inline-flex items-center gap-2 bg-gochugaru/10 text-gochugaru px-4 py-2 rounded-full text-xs font-medium mb-6">
+        <div class="w-2 h-2 bg-gochugaru rounded-full animate-pulse"></div>
+        This is a Demo Mode notification
+      </div>
+      <p class="text-gray-400 text-xs mb-8">In a live version, you'd receive an SMS and email confirmation with your order details and estimated delivery time.</p>
+      <button onclick="document.getElementById('oov').classList.remove('sh')" class="bp">Continue Browsing</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════ RESERVATIONS -->
+<div id="pg-res" class="pg">
+  <div class="min-h-screen" style="background:linear-gradient(155deg,#1A1A1A 0%,#2e1c1c 55%,#1A1A1A 100%)">
+    <div class="max-w-5xl mx-auto px-6 py-20">
+      <div class="text-center mb-16">
+        <p class="text-golden text-xs tracking-[.3em] uppercase font-medium mb-4">Join Us</p>
+        <h1 class="font-serif font-bold text-white text-5xl md:text-6xl mb-4">Reserve Your<br><em style="font-style:italic">Table.</em></h1>
+        <p class="text-white/45 text-base max-w-md mx-auto">Experience the warmth of Korean hospitality. We look forward to welcoming you.</p>
+      </div>
+
+      <div class="grid lg:grid-cols-5 gap-10">
+        <!-- Form -->
+        <div class="lg:col-span-3">
+          <div class="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-8">
+            <h3 class="font-serif text-white text-xl font-bold mb-6">Your Details</h3>
+            <div class="space-y-5">
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="text-xs text-white/38 uppercase tracking-wider block mb-2">First Name</label>
+                  <input type="text" placeholder="Kim" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-sm placeholder-white/20 outline-none focus:border-golden/50 transition-colors">
+                </div>
+                <div>
+                  <label class="text-xs text-white/38 uppercase tracking-wider block mb-2">Last Name</label>
+                  <input type="text" placeholder="Minjun" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-sm placeholder-white/20 outline-none focus:border-golden/50 transition-colors">
+                </div>
+              </div>
+              <div>
+                <label class="text-xs text-white/38 uppercase tracking-wider block mb-2">Email</label>
+                <input type="email" placeholder="your@email.com" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-sm placeholder-white/20 outline-none focus:border-golden/50 transition-colors">
+              </div>
+              <div>
+                <label class="text-xs text-white/38 uppercase tracking-wider block mb-2">Phone</label>
+                <input type="tel" placeholder="(949) 555-0000" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-sm placeholder-white/20 outline-none focus:border-golden/50 transition-colors">
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="text-xs text-white/38 uppercase tracking-wider block mb-2">Date</label>
+                  <input type="date" value="2026-05-01" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-sm outline-none focus:border-golden/50 transition-colors">
+                </div>
+                <div>
+                  <label class="text-xs text-white/38 uppercase tracking-wider block mb-2">Time</label>
+                  <select class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-sm outline-none focus:border-golden/50 transition-colors">
+                    <option class="bg-charcoal">6:00 PM</option><option class="bg-charcoal">6:30 PM</option>
+                    <option class="bg-charcoal" selected>7:00 PM</option><option class="bg-charcoal">7:30 PM</option>
+                    <option class="bg-charcoal">8:00 PM</option><option class="bg-charcoal">8:30 PM</option>
+                    <option class="bg-charcoal">9:00 PM</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label class="text-xs text-white/38 uppercase tracking-wider block mb-3">Party Size</label>
+                <div class="flex gap-2 flex-wrap">
+                  <button onclick="psize(this)" class="pb">1</button>
+                  <button onclick="psize(this)" class="pb sel">2</button>
+                  <button onclick="psize(this)" class="pb">3</button>
+                  <button onclick="psize(this)" class="pb">4</button>
+                  <button onclick="psize(this)" class="pb">5</button>
+                  <button onclick="psize(this)" class="pb">6</button>
+                  <button onclick="psize(this)" class="pb">7</button>
+                  <button onclick="psize(this)" class="pb">8+</button>
+                </div>
+              </div>
+              <div>
+                <label class="text-xs text-white/38 uppercase tracking-wider block mb-2">Special Requests</label>
+                <textarea rows="3" placeholder="Allergies, special occasion, seating preferences..." class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white text-sm placeholder-white/20 outline-none focus:border-golden/50 transition-colors resize-none"></textarea>
+              </div>
+              <button onclick="document.getElementById('rov').classList.add('sh')" class="bp w-full py-4">Confirm Reservation</button>
+              <p class="text-center text-white/20 text-xs">You'll receive a confirmation email within minutes</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="lg:col-span-2 space-y-5">
+          <div class="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-6">
+            <p class="text-white/35 text-xs uppercase tracking-widest mb-4">Hours</p>
+            <div class="space-y-2.5 text-sm">
+              <div class="flex justify-between"><span class="text-white/55">Mon – Thu</span><span class="text-white">11am – 9:30pm</span></div>
+              <div class="flex justify-between"><span class="text-white/55">Friday</span><span class="text-white">11am – 10:30pm</span></div>
+              <div class="flex justify-between"><span class="text-white/55">Saturday</span><span class="text-white">10am – 10:30pm</span></div>
+              <div class="flex justify-between"><span class="text-white/55">Sunday</span><span class="text-white">10am – 9:30pm</span></div>
+            </div>
+          </div>
+          <div class="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-6">
+            <p class="text-white/35 text-xs uppercase tracking-widest mb-3">Location</p>
+            <p class="text-white text-sm mb-1">2300 Alton Pkwy, Suite 210</p>
+            <p class="text-white/55 text-sm mb-4">Irvine, CA 92606</p>
+            <div class="rounded-xl bg-white/5 h-28 flex items-center justify-center text-white/20 text-xs border border-white/5">[ Map ]</div>
+          </div>
+          <div class="bg-gochugaru/15 backdrop-blur border border-gochugaru/25 rounded-2xl p-6">
+            <p class="text-gochugaru text-xs uppercase tracking-widest mb-2 font-medium">Large Parties</p>
+            <p class="text-white/65 text-sm leading-relaxed">Parties of 9 or more? Call us at <span class="text-white">(949) 555-0192</span> or email us for private dining arrangements.</p>
+          </div>
+          <div class="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-6">
+            <p class="text-white/35 text-xs uppercase tracking-widest mb-4">Tonight's Availability</p>
+            <div class="grid grid-cols-3 gap-2">
+              <div class="text-center py-2 rounded-lg bg-green-500/15 border border-green-500/25"><p class="text-green-400 text-xs font-medium">6:00</p><p class="text-green-400/60 text-xs">Open</p></div>
+              <div class="text-center py-2 rounded-lg bg-green-500/15 border border-green-500/25"><p class="text-green-400 text-xs font-medium">6:30</p><p class="text-green-400/60 text-xs">Open</p></div>
+              <div class="text-center py-2 rounded-lg bg-white/5 border border-white/8 opacity-50"><p class="text-white/40 text-xs font-medium">7:00</p><p class="text-white/30 text-xs">Full</p></div>
+              <div class="text-center py-2 rounded-lg bg-green-500/15 border border-green-500/25"><p class="text-green-400 text-xs font-medium">7:30</p><p class="text-green-400/60 text-xs">Open</p></div>
+              <div class="text-center py-2 rounded-lg bg-white/5 border border-white/8 opacity-50"><p class="text-white/40 text-xs font-medium">8:00</p><p class="text-white/30 text-xs">Full</p></div>
+              <div class="text-center py-2 rounded-lg bg-green-500/15 border border-green-500/25"><p class="text-green-400 text-xs font-medium">8:30</p><p class="text-green-400/60 text-xs">Open</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reservation confirm overlay -->
+  <div id="rov" class="ov">
+    <div class="bg-white rounded-2xl shadow-2xl p-10 max-w-md w-full text-center">
+      <div class="w-20 h-20 rounded-full mx-auto mb-6 flex items-center justify-center" style="background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(194,65,12,.15))">
+        <svg class="h-10 w-10 text-golden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+      </div>
+      <h2 class="font-serif font-bold text-3xl mb-2">Reservation Confirmed.</h2>
+      <p class="text-gray-400 text-sm mb-1">Table for 2 · May 1, 2026 · 7:00 PM</p>
+      <div class="inline-flex items-center gap-2 bg-gochugaru/10 text-gochugaru px-4 py-2 rounded-full text-xs font-medium mt-3 mb-6">
+        <div class="w-2 h-2 bg-gochugaru rounded-full animate-pulse"></div>
+        This is a Demo Mode notification
+      </div>
+      <p class="text-gray-400 text-xs mb-8">In a live version, a confirmation would be sent to your email and phone with full details and a calendar invite.</p>
+      <button onclick="document.getElementById('rov').classList.remove('sh')" class="bp">Wonderful</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CURSOR ──────────────────────────────────────────────
+const c1=document.getElementById('cur'),c2=document.getElementById('cur2');
+let mx=0,my=0,fx=0,fy=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;c1.style.left=mx+'px';c1.style.top=my+'px'});
+(function anim(){fx+=(mx-fx)*.11;fy+=(my-fy)*.11;c2.style.left=fx+'px';c2.style.top=fy+'px';requestAnimationFrame(anim)})();
+document.querySelectorAll('button,a,img,.mi').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('cx'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('cx'));
+});
+
+// ── PROGRESS + NAV ──────────────────────────────────────
+window.addEventListener('scroll',()=>{
+  const p=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight))*100;
+  document.getElementById('prog').style.width=p+'%';
+  const nav=document.getElementById('nav');
+  const onHome=document.getElementById('pg-home').classList.contains('act');
+  if(window.scrollY>60){nav.classList.add('s')}else if(onHome){nav.classList.remove('s')}
+});
+
+// ── FADE-IN ──────────────────────────────────────────────
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on')});
+},{threshold:.12});
+document.querySelectorAll('.fi').forEach(el=>obs.observe(el));
+
+// ── PAGE NAV ─────────────────────────────────────────────
+function go(page){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('act'));
+  document.getElementById('pg-'+page).classList.add('act');
+  window.scrollTo({top:0,behavior:'smooth'});
+  const nav=document.getElementById('nav');
+  const links=nav.querySelectorAll('.nl');
+  const logo=document.getElementById('nlogo');
+  const cta=document.getElementById('ncta');
+  if(page==='home'){
+    nav.style.background='transparent';
+    nav.style.boxShadow='none';
+    nav.classList.remove('s');
+    links.forEach(l=>l.style.color='rgba(255,255,255,.85)');
+    logo.style.color='#fff';
+    cta.style.cssText='border:1.5px solid rgba(255,255,255,.55);color:#fff;background:transparent';
+  } else {
+    nav.classList.add('s');
+    links.forEach(l=>l.style.color='#1A1A1A');
+    logo.style.color='#1A1A1A';
+    cta.style.cssText='background:#C2410C;color:#fff;border-color:#C2410C;padding:8px 20px;border-radius:4px';
+  }
+  setTimeout(()=>{document.querySelectorAll('.fi:not(.on)').forEach(el=>obs.observe(el))},80);
+}
+
+// ── MENU TABS ────────────────────────────────────────────
+function tab(id){
+  ['soups','hotpots','plates','drinks'].forEach(t=>{
+    document.getElementById('ms-'+t).classList.add('hidden');
+    const btn=document.getElementById('tb-'+t);
+    btn.classList.remove('act','text-gochugaru','border-gochugaru');
+    btn.classList.add('text-gray-400','border-transparent');
+  });
+  document.getElementById('ms-'+id).classList.remove('hidden');
+  const ab=document.getElementById('tb-'+id);
+  ab.classList.add('act','text-gochugaru','border-gochugaru');
+  ab.classList.remove('text-gray-400','border-transparent');
+}
+
+// ── CART ─────────────────────────────────────────────────
+let cart=[];
+function addCart(name,price){
+  const ex=cart.find(i=>i.name===name);
+  ex?ex.qty++:cart.push({name,price,qty:1});
+  renderCart();
+  toast(name+' added to your order');
+}
+function renderCart(){
+  const wrap=document.getElementById('citems');
+  const badge=document.getElementById('cbadge');
+  const qty=cart.reduce((s,i)=>s+i.qty,0);
+  badge.textContent=qty;
+  if(!cart.length){
+    wrap.innerHTML='<div id="cempty" class="text-center py-5 text-gray-400 text-sm"><p class="text-3xl mb-2">🥢</p>Your cart is empty</div>';
+    document.getElementById('csub').textContent='$0.00';
+    document.getElementById('ctax').textContent='$0.00';
+    document.getElementById('ctotal').textContent='$3.99';
+    return;
+  }
+  wrap.innerHTML='';
+  let sub=0;
+  cart.forEach((item,i)=>{
+    sub+=item.price*item.qty;
+    const d=document.createElement('div');
+    d.className='ci flex items-center justify-between text-sm gap-2';
+    d.innerHTML=`<div class="flex items-center gap-2 flex-1 min-w-0">
+      <div class="flex items-center bg-stone border border-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+        <button onclick="adj(${i},-1)" class="px-2 py-1 text-gray-400 hover:text-gochugaru leading-none text-base">-</button>
+        <span class="px-1 font-medium min-w-[20px] text-center text-xs">${item.qty}</span>
+        <button onclick="adj(${i},1)" class="px-2 py-1 text-gray-400 hover:text-gochugaru leading-none text-base">+</button>
+      </div>
+      <span class="text-xs text-gray-700 truncate">${item.name}</span>
+    </div>
+    <span class="font-medium text-xs flex-shrink-0">$${(item.price*item.qty).toFixed(2)}</span>`;
+    wrap.appendChild(d);
+  });
+  const tax=sub*.0875,total=sub+3.99+tax;
+  document.getElementById('csub').textContent='$'+sub.toFixed(2);
+  document.getElementById('ctax').textContent='$'+tax.toFixed(2);
+  document.getElementById('ctotal').textContent='$'+total.toFixed(2);
+}
+function adj(i,d){cart[i].qty+=d;if(cart[i].qty<=0)cart.splice(i,1);renderCart()}
+function placeOrder(){
+  if(!cart.length){toast('Add items to your order first');return}
+  document.getElementById('oov').classList.add('sh');
+  cart=[];renderCart();
+}
+
+// ── TOAST ────────────────────────────────────────────────
+let tt;
+function toast(msg){
+  const el=document.getElementById('toast');
+  document.getElementById('tmsg').textContent=msg;
+  el.classList.add('sh');
+  clearTimeout(tt);
+  tt=setTimeout(()=>el.classList.remove('sh'),3000);
+}
+
+// ── REVIEW SLIDER ────────────────────────────────────────
+let ri=0;
+function slide(dir){
+  ri=Math.max(0,Math.min(2,ri+dir));
+  document.getElementById('rt').style.transform=`translateX(-${ri*(320+20)}px)`;
+  document.querySelectorAll('#rdots div').forEach((d,i)=>{
+    d.className=i===ri?'w-2 h-2 rounded-full bg-golden':'w-2 h-2 rounded-full bg-white/20';
+  });
+}
+
+// ── PARTY SIZE ───────────────────────────────────────────
+function psize(btn){
+  document.querySelectorAll('.pb').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+}
+
+// ── HERO PARALLAX ────────────────────────────────────────
+window.addEventListener('scroll',()=>{
+  const bg=document.getElementById('hbg');
+  if(bg)bg.style.transform=`translateY(${window.scrollY*.28}px)`;
+});
+
+// init
+go('home');
+</script>
+</body>
+</html>
